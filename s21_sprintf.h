@@ -2,7 +2,7 @@
 
 #ifndef SPRINTF21_H
 #define SPRINTF21_H
-// #define s21_NULL ((void *)0)
+#define s21_NULL ((void *)0)
 
 typedef struct param {
   int error;
@@ -29,7 +29,7 @@ int s21_sprintf(char *str, const char *str_format, ...);
 void s21_change(param *param);
 void s21_alignment(char ***str, param *param);
 int s21_str_to_number(const char *str_sing);
-// int s21_strlen(const char *str_du);
+int s21_strlen(const char *str_du);
 int s21_str_format(char c);
 int s21_str_format_is(char c, param *param);
 void s21_update_param(param *param);

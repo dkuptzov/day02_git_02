@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 #include "s21_case.h"
-#include "s21_string.h"
+
 
 int s21_sprintf(char *str, const char *str_format, ...) {
   param param = {0, 0,    0, 0, 0, -1, 'x', 'x', 'x',
@@ -87,6 +87,12 @@ void s21_change(param *param) {
   if (param->flag_space == 1 && param->flag_plus == 1) param->flag_space = 0;
 }
 
+int s21_strlen(const char *str_du) {
+  int i = 0;
+  for (; str_du[i] != '\0'; i++);
+  return i;
+}
+
 int s21_str_format(char c) {
   int ret = 0;
   if (c == '-' || c == '+' || c == '0' || c == ' ' || c == '.' || c == '#' ||
@@ -124,7 +130,7 @@ void s21_alignment(char ***str, param *param) {
     else if (param->accuracy > 0)
       s21_for_aligment(str, param, param->accuracy, '0');
   } else if (param->type == 'u' || param->type == 'd' || param->type == 'f' ||
-             param->type == 'E' || param->type == 'e') {
+             param->type == 'E' || param->type == 'e' || param->type == 'g' || param->type == 'G') {
     if (param->width > 0 && param->flag_zero == 0) {
       if (param->va_f < 0) param->width--;
       s21_for_aligment(str, param, param->width, ' ');
@@ -133,22 +139,18 @@ void s21_alignment(char ***str, param *param) {
       else if (param->va_f < 0 && param->flag_minus == 0)
         (**str)[param->count++] = '-';
     }
-    if (param->va_int < 0 && param->width > 0 && param->accuracy > 0)
-      (**str)[param->count++] = '-';
     if (param->width > 0 && param->flag_zero == 1) {
       if (param->accuracy < 0) param->accuracy = 0;
       s21_for_aligment(str, param, param->width - param->accuracy, '0');
     }
     if (param->accuracy > 0 && param->va_f != 0.0 && param->type != 'E' &&
-        param->type != 'e')
+        param->type != 'e' && param->type != 'g' && param->type != 'G')
       s21_for_aligment(str, param, param->accuracy, '0');
   } else if (param->type == 's' || param->type == 'p') {
     if (param->width > 0 && (param->flag_zero == 0 || param->flag_dot == 1))
       s21_for_aligment(str, param, param->width, ' ');
     else if (param->width > 0 && param->flag_zero == 1)
       s21_for_aligment(str, param, param->width, '0');
-    else if (param->accuracy > 0)
-      s21_for_aligment(str, param, param->accuracy, '0');
   } else if (param->type == 'c') {
     if (param->width > 0) s21_for_aligment(str, param, param->width, ' ');
   } else if (param->type == 'o') {
@@ -239,6 +241,7 @@ void s21_switch_if(char c, char *str_ready, va_list args, param *param) {
       long double temp = va_arg(args, double);
       param->va_f = (long double)temp;
     }
+    printf("%c\n", c);
     if (c == 'f')
       s21_case_f(&str_ready, param);
     else
@@ -286,7 +289,7 @@ void s21_malloc_update_main_str(char **str, param *param) {
     param->str_size *= 2;
     char *temp = realloc(*str, param->str_size + 1);
     if (temp == NULL)
-      param->error = 1;
+      param->error = 2;
     else
       *str = temp;
   }

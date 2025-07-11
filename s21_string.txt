@@ -1,0 +1,298 @@
+#include "s21_string.h"
+
+
+/*------------------------------------------------------------------------------------------------
+
+                                                    PART 1
+
+=------------------------------------------------------------------------------------------------*/
+
+
+
+
+void *s21_memchr(const void *str, int c, s21_size_t n){ // 1
+  char* ptr=s21_NULL;
+  int exit=0; 
+
+  for(int i=0;((char*)str)[i]!='\0' && i<(int)n && exit==0;i++){
+    if(  ((char*)str)[i]  ==  (char)c  ){
+      ptr= & ((char*)str)[i]; //ptr = (char*)   &  str[i];
+    }
+  }
+  return (void*)ptr;
+}
+
+
+int s21_memcmp(const void *str1, const void *str2, s21_size_t n) { //2
+  int result=0;
+  for(int i=0; result==0 && i<(int)n;i++){
+    result = ((char*)str1)[i] - ((char*)str2)[i];
+  }
+
+  return result;
+}
+
+
+void *s21_memcpy(void *dest, const void *src, s21_size_t n){ // 3
+  for(int i=0;i<(int)n && ((char*)src) [i]!='\0';i++){
+    ((char*)dest)[i]   =    ((char*)src)[i];
+  }
+
+  return dest;
+}
+
+
+void *s21_memset(void *str, int c, s21_size_t n){ //4
+  for(int i=0;i<(int)n;i++){
+    ((char*)str) [i] = (char)c;
+  }
+  return str;
+}
+
+
+char *s21_strncat(char *dest, const char *src, s21_size_t n){ // 5
+  int i=0;
+  while(dest[i]!='\0'){
+    i++;
+  }
+
+  for(int j=0;src[j]!='\0' && j<(int)n;j++){
+      dest[i+j] = src[j];
+  }
+
+  return dest;
+}
+
+char *s21_strchr(const char *str, int c){ //6
+  char *ptr = s21_NULL;
+  int exit=0;
+  for(int i=0;  str[i]!='\0' && exit == 0  ;i++){
+    if(str[i]==c){
+      ptr = (char*)&str[i];
+      exit = 1;
+    }
+  }
+  return ptr;
+}
+
+
+int s21_strncmp(const char *str1, const char *str2, s21_size_t n){ // 7
+  int answer = 0;
+  for (int i = 0; answer == 0 && i < (int)n; i++) {
+    answer = str1[i] - str2[i];
+  }
+  return answer;
+}
+
+
+char *strncpy(char *dest, const char *src, s21_size_t n){ // 8 Копирует до n символов из строки, на которую указывает src, в dest.
+    for(int i=0; src[i]!='\0' && i<(int)n; i++){
+        dest[i]=src[i];
+    }
+    return dest;
+}
+
+
+s21_size_t s21_strcspn(const char *str1, const char *str2){ //9
+    int count=0;
+    int flag=0;
+    for(int i=0;str1[i]!='\0' && flag==0;i++){     
+        for(int j=0;str2[j]!='\0';j++){
+            if(str1[i]==str2[j]){
+               flag=1;
+            }
+        }
+
+        if(flag==0){
+            count++;
+        }
+    }
+    return count;
+}
+
+
+char *s21_strerror(int errnum) {  // 10
+  static char res[S21_SIZE_ERRORLIST];
+  s21_memset(res, 0, s21_strlen(res));
+  if (errnum < 0 || errnum >= S21_SIZE_ERRORLIST)
+    s21_strcpy(res, "-1");
+  else
+    s21_strcpy(res, s21_errlist[errnum]);
+  return res;
+}
+
+
+s21_size_t s21_strlen(const char *str){ //11
+    int len=0;
+    while(str[len]!='\0'){
+        len++;
+    }
+    return len;
+}
+
+
+char *s21_strpbrk(const char *str1, const char *str2) { //12
+  char *ptr = s21_NULL;
+  int exit = 1;
+  for (int i = 0; str1[i] != '\0' && exit == 1; i++) { // i++
+    for (int j = 0; str2[j] != '\0' && exit == 1; j++) {
+      if (str1[i] == str2[j]) {
+        ptr = (char *)(&str1[i]);
+        exit = 0;
+      }
+    }
+  }
+  return ptr;
+}
+
+
+char *s21_strrchr(const char *str, int c) {//13
+  char *ptr = s21_NULL;
+  for (int i = 0; str[i] != '\0'; i++) {
+    if (str[i] == c) {
+      ptr = (char *)(&str[i]);
+    }
+  }
+  return ptr;
+}
+
+
+char *s21_strstr(const char *haystack, const char *needle){ //14
+  char *ptr = s21_NULL;
+  int flag = 1; 
+  for(int i=0; i < (int)s21_strlen(haystack) && flag == 1;i++){
+    ptr = (char*)&haystack[i];
+    if(  s21_strncmp(ptr,  needle , s21_strlen(needle) ) ==0  ){
+      flag = 0;
+    }
+  }
+  return ptr;
+}
+
+
+char *s21_strtok(char *str, const char *delim) {  // 15
+  static char *current_pos = s21_NULL;
+  if (str != s21_NULL) {
+    current_pos = str;
+    while (*current_pos != '\0' &&
+           s21_strchr(delim, *current_pos) != s21_NULL) {
+      *(current_pos++) = '\0';
+    }
+  }
+  char *res = current_pos;
+  if (current_pos != s21_NULL) {
+    while (*current_pos != '\0' &&
+           s21_strchr(delim, *current_pos) == s21_NULL) {
+      current_pos++;
+    }
+    while (*current_pos != '\0' &&
+           s21_strchr(delim, *current_pos) != s21_NULL) {
+      *(current_pos++) = '\0';
+    }
+    if (*res == '\0') {
+      res = s21_NULL;
+    }
+  }
+  return res;
+}
+
+
+char *s21_strcpy(char *strDest, const char *strSrc){
+    char *temp = strDest;
+    for(int i=0;strSrc[i]!='\0';i++){
+        strDest[i]=strSrc[i];
+    }
+    return temp;
+}
+
+
+/*------------------------------------------------------------------------------------------------
+
+                                                    PART 5
+
+=------------------------------------------------------------------------------------------------*/
+
+
+
+void *s21_to_upper(const char *str){
+  int len = (int)s21_strlen(str);
+  char *ptr = (char*)calloc( (len+1)  , sizeof(char)  );
+  s21_strcpy(ptr,str);
+
+  for(int i=0;ptr[i]!='\0';i++){
+    if(ptr[i]>='a' && ptr[i]<='z'){
+          ptr[i] = ptr[i] - 'a' + 'A'; 
+    }
+  }
+
+  return (void*)ptr;
+}
+
+
+
+void *s21_to_lower(const char *str){
+  int len = (int)s21_strlen(str);
+  char *ptr = (char*)calloc(   (len+1)  , sizeof(char)   );
+  s21_strcpy(ptr,str);
+
+  for(int i=0;ptr[i]!='\0';i++){
+    if(ptr[i]>='A' && ptr[i]<='Z'){
+          ptr[i] = ptr[i] - 'A' + 'a'; 
+    }
+  }
+
+  return (void*)ptr;
+}
+
+
+void *s21_insert(const char *src, const char *str, s21_size_t start_index){
+    int len1=s21_strlen(src);
+    int len2=s21_strlen(str);
+
+    char *res = (char *)calloc( len1 + len2 + 1  , sizeof(char) );
+
+    int res_index=0;
+
+    for(int i=0 ;i<(int)start_index;    i++, res_index++  ) // начало до индекса
+        res[res_index] = src[i];
+
+    for(int i=0;i<len2; i++, res_index++)
+        res[res_index] = str[i];
+
+    for(int i=start_index;i<len1; i++, res_index++)
+        res[res_index] = src[i];
+
+    return (void*)res;
+}
+
+
+void *s21_trim(const char *src, const char *trim_chars){
+
+    char* ptr = s21_NULL;
+
+    int len = s21_strlen(src);
+
+    int start_index=0;
+    int end_index=len-1;
+
+    for(int i =0; i<len && start_index==0 ;i++){ // обрезаить начало
+        if(s21_strchr(trim_chars,src[i]) == s21_NULL){
+            start_index = i;
+        }
+    }
+
+    for(int i = len-1 ; i>0 && end_index==len-1 ;i--){ // обрезаем конец
+        if(s21_strchr(trim_chars,src[i]) == s21_NULL){
+            end_index = i;
+        }
+    }
+
+    ptr = calloc(end_index-start_index+2,sizeof(char));
+
+    for(int i=0, j=start_index; j<=end_index; i++,j++)
+        ptr[i] = src[j];
+
+    return (void *)ptr;
+}
+
+

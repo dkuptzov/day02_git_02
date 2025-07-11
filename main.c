@@ -30,27 +30,28 @@ int main() {
 //"%7.9f" 1.0
 //"%1.4f" 1.0
 
-    int a, x1 = 0, x2 = 0;
+    int a;
+    //int a, x1 = 0, x2 = 0;
     //long double val = 15.35;7
-    srand(time(NULL));
-    x1 = rand() % 10;
-    x2 = rand() % 10;
-    char *format89 = "%*.*f * %f";
-    //float x = 0.0000143;
-    float x = 0.00004650;
-    a = s21_sprintf(s1, format89, x1, x2, x, x);
+    //srand(time(NULL));
+    //x1 = rand() % 10;
+    //x2 = rand() % 10;
+    //char *format89 = "%*.*f * %f";
+    a = s21_sprintf(s1, "%11.7g", 0.4);
+    //a = s21_sprintf(s1, format89, x1, x2, x, x);
     printf("STR1_200: %d * %s\n", a, s1);
-    a = sprintf(s2, format89, x1, x2, x, x);
-    if (strcmp(s1, s2)) {
-        printf("STR: %s * %s\n", s1, s2);
-        int vvv;
-        scanf("%d", &vvv);
-    }
+    //a = sprintf(s2, format89, x1, x2, x, x);
+    a = sprintf(s2, "%11.7g", 0.4);
+    //if (strcmp(s1, s2)) {
+    //    printf("STR: %s * %s\n", s1, s2);
+    //    int vvv;
+    //    scanf("%d", &vvv);
+    //}
     printf("STR2_200: %d * %s\n", a, s2);
     memset(s1, '\0', 40);
     memset(s2, '\0', 40);
 
-
+/*
     double val = 0.00004650;
     //double increment = 0.001;
     int max_iterations = 1000;
@@ -77,7 +78,7 @@ int main() {
         memset(s1, '\0', 40);
         memset(s2, '\0', 40);
     }
-
+*/
 
     //double y = 85.95654;
     //int x = 123456789;

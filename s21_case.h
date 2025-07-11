@@ -7,6 +7,7 @@
 
 void s21_case_c(char **str, param *param);
 void s21_case_g(char **str, param *param);
+int s21_case_g_space(param *param);
 int s21_case_g_1(param *param, int less_zero, int x);
 void s21_case_g_2(param *param);
 void s21_case_u(char **str, param *param);
